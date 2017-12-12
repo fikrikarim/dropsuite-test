@@ -1,3 +1,5 @@
+#!/usr/bin/ruby
+
 require 'digest/md5'
 
 # Takes the first argument from the command line to get a specific location
