@@ -2,5 +2,8 @@
 location = ARGV[0] || "."
 location = location + "/**/*"
 
-dir = Dir[location]
-puts dir
+Dir[location].each do |filename|
+    # Skip directory
+    next if File.directory?(filename)
+    puts filename
+end
