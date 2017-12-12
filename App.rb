@@ -1,1 +1,3 @@
-puts Dir.entries(".")
+dir = Dir["**/*"]
+
+puts dir
