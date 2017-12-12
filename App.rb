@@ -4,6 +4,7 @@ location = location + "/**/*"
 
 files = {}
 
+# Recursive search of the directory
 Dir[location].each do |filename|
     # Skip directory
     next if File.directory?(filename)
@@ -16,5 +17,16 @@ Dir[location].each do |filename|
         files[size] = [filename]
     end
 
-    puts files
 end
+
+# Array of list of identical files. Will return [key, value]
+identical_files = files.max_by{|key, value| value.length }
+number_of_files = identical_files[1].length
+
+# Read the content of the file
+file = File.open(identical_files[1].first)
+content = file.read
+file.close
+
+# Print the content and the number of identical files
+puts "#{content} #{number_of_files}"
