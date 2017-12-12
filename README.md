@@ -24,9 +24,9 @@ The program searches the directory recursively and stores files with the same fi
 Using MBP "13 2015 and my files, using `Benchmark.realtime`
 
 | Directory     | File numbers  | Directory size (GB) | Execution time (s)  |
+| ------------- | ------------- | ------------------- | ------------------- |
 | ~/downloads   | 7209          | 6,13                | ~0.1                |
 | ~/workspace   | 103942        | 1,16                | ~1.8                |
-
 
 ## Limitations
 
