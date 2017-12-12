@@ -12,6 +12,7 @@ hash1 = {}
 Dir[location].each do |filename|
     # Skip directory
     next if File.directory?(filename)
+    next if !File.size?(filename)
 
     # Store files with the same size on the same hash key
     size = File.size(filename)
