@@ -1,5 +1,4 @@
 #!/usr/bin/ruby
-
 require 'digest/md5'
 
 # Takes the first argument from the command line to get a specific location
@@ -23,11 +22,11 @@ Dir[location].each do |filename|
     end
 end
 
+# Recursive method, to find the identical files with the same MD5.
 def find_duplicates(hash, i = 0, largest_duplicates = [[], []])
     # Array of files with same size. Will return [key, value]
     files_with_same_size_1 = hash.max_by(i+2){|key, value| value.length }[i]
     files_with_same_size_2 = hash.max_by(i+2){|key, value| value.length }[i+1]
-    # puts files_with_same_size
 
     # Array of files with identical MD5. Quite enough to search for identical files
     files_with_same_hash = ArrayToMD5(files_with_same_size_1).max_by{|key, value| value.length }
@@ -44,7 +43,6 @@ def find_duplicates(hash, i = 0, largest_duplicates = [[], []])
 end
 
 def ArrayToMD5(array)
-    # puts array
     # Check the files with identical size and compare their MD5 
     # to ensure the content is really the same
     hash2 = {}
@@ -66,5 +64,5 @@ file = File.open(final_duplicates[1].first)
 content = file.read
 file.close
 
-# # Print the content and the number of identical files
+# Print the content and the number of identical files
 puts "#{content} #{final_duplicates[1].length}"
