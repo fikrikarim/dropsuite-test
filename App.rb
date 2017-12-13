@@ -21,34 +21,50 @@ Dir[location].each do |filename|
     else
         hash1[size] = [filename]
     end
-
 end
 
-# Array of files with same size. Will return [key, value]
-files_with_same_size = hash1.max_by{|key, value| value.length }
+def find_duplicates(hash, i = 0, largest_duplicates = [[], []])
+    # Array of files with same size. Will return [key, value]
+    files_with_same_size_1 = hash.max_by(i+2){|key, value| value.length }[i]
+    files_with_same_size_2 = hash.max_by(i+2){|key, value| value.length }[i+1]
+    # puts files_with_same_size
 
-# Check the files with identical size and compare their MD5 
-# to ensure the content is really the same
-hash2 = {}
+    # Array of files with identical MD5. Quite enough to search for identical files
+    files_with_same_hash = ArrayToMD5(files_with_same_size_1).max_by{|key, value| value.length }
 
-files_with_same_size[1].each do |filename|
-    key = Digest::MD5.hexdigest(IO.read(filename)).to_sym
-    if hash2.has_key? key
-        # puts "same file #{filename}"
-        hash2[key].push filename
+    if largest_duplicates[1].length < files_with_same_hash[1].length
+        largest_duplicates = files_with_same_hash
+    end
+
+    if largest_duplicates[1].length > files_with_same_size_2[1].length
+        return largest_duplicates
     else
-        hash2[key] = [filename]
+        find_duplicates(hash, i+1, largest_duplicates)
     end
 end
 
-# Array of files with identical MD5. Quite enough to search for identical files
-identical_files = hash2.max_by{|key, value| value.length }
-number_of_identical_files = identical_files[1].length
+def ArrayToMD5(array)
+    # puts array
+    # Check the files with identical size and compare their MD5 
+    # to ensure the content is really the same
+    hash2 = {}
+    array[1].each do |filename|
+        key = Digest::MD5.hexdigest(IO.read(filename)).to_sym
+        if hash2.has_key? key
+            # puts "same file #{filename}"
+            hash2[key].push filename
+        else
+            hash2[key] = [filename]
+        end
+    end
+    return hash2
+end
 
-# # Read the content of the file
-file = File.open(identical_files[1].first)
+# Read the content of the file
+final_duplicates = find_duplicates(hash1)
+file = File.open(final_duplicates[1].first)
 content = file.read
 file.close
 
-# Print the content and the number of identical files
-puts "#{content} #{number_of_identical_files}"
+# # Print the content and the number of identical files
+puts "#{content} #{final_duplicates[1].length}"
